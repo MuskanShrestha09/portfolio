@@ -1,0 +1,35 @@
+{
+  "about": {
+    "bio": "I am a passionate creator who lives at the intersection of design and technology. My journey began with a simple curiosity about how pixels and code come together to create meaning. Today, I help companies and startups turn their vision into tangible digital realities. Whether it's a complex web application or a brand identity, I bring a meticulous eye for detail and a focus on user-centric results.",
+    "skills": {
+      "design": [
+        "UI/UX Design",
+        "Brand Identity",
+        "Prototyping",
+        "Interaction Design"
+      ],
+      "development": [
+        "Next.js / React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Cloudflare Stack"
+      ]
+    }
+  },
+  "projects": [
+    {
+      "id": "1",
+      "title": "Nova Dashboard",
+      "category": "UI/UX Design",
+      "description": "A comprehensive dashboard for monitoring cloud infrastructure.",
+      "image": "/project-1.jpg"
+    },
+    {
+      "id": "2",
+      "title": "Lumina App",
+      "category": "Mobile Design",
+      "description": "An AI-powered application for smart home automation.",
+      "image": "/project-2.jpg"
+    }
+  ]
+}

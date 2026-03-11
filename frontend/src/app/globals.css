@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #ffffff;
+  --color-foreground: #111111;
+  --color-primary: #111111;
+  --color-secondary: #555555;
+  --color-accent: #111111;
+  --color-muted: #f4f4f5;
+  --color-border: #eaeaea;
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacing Tokens */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-xxl: 80px;
+  --spacing-section: 120px;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --primary: #111111;
+  --secondary: #555555;
+  --accent: #111111;
+  --muted: #f4f4f5;
+  --border: #eaeaea;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  cursor: none;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a, button, [role="button"], input, textarea {
+  cursor: none;
+}
+
+@layer utilities {
+  .container-custom {
+    @apply max-w-[1200px] mx-auto px-6 md:px-10;
+  }
+  
+  .section-spacing {
+    @apply py-[120px];
+  }
+
+  /* Typography Scale */
+  .hero-heading {
+    @apply text-[64px] font-bold leading-[1.1] tracking-[-0.02em];
+  }
+  
+  .section-heading {
+    @apply text-[36px] font-semibold leading-[1.2] tracking-[-0.01em];
+  }
+  
+  .subheading {
+    @apply text-[22px] font-medium leading-[1.4];
+  }
+  
+  .body-text {
+    @apply text-[16px] font-normal leading-[1.6] text-secondary;
+  }
+  
+  .small-text {
+    @apply text-[14px] font-normal leading-[1.6];
+  }
+  
+  .caption {
+    @apply text-[12px] font-normal leading-[1.5];
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--foreground);
+}
+
+::selection {
+  background-color: rgba(17, 17, 17, 0.1);
+  color: #000;
+}
+
+/* Scroll Reveling */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-in-out;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
