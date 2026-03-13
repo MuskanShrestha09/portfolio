@@ -18,7 +18,7 @@ const AdminDashboard = () => {
 
     fetch("/api/admin")
       .then(res => res.json())
-      .then(setData);
+      .then((data: unknown) => setData(data as SiteData));
   }, [router]);
 
   const handleSave = async () => {
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="pt-32 pb-20">
-      <div className="container mx-auto px-6 max-w-4xl">
+      <div className="container-custom max-w-4xl">
         <div className="flex justify-between items-center mb-12">
           <h1 className="text-4xl font-bold">CMS Dashboard</h1>
           <button 

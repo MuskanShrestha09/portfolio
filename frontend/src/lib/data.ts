@@ -17,38 +17,41 @@ export interface SiteData {
   projects: Project[];
 }
 
-import fs from 'fs';
-import path from 'path';
-
-const DATA_PATH = path.join(process.cwd(), 'data.json');
-
-export function getData(): SiteData {
-  if (!fs.existsSync(DATA_PATH)) {
-    const initialData: SiteData = {
-      about: {
-        bio: "I am a passionate creator who lives at the intersection of design and technology...",
-        skills: {
-          design: ["UI/UX Design", "Brand Identity", "Prototyping", "Interaction Design"],
-          development: ["Next.js / React", "TypeScript", "Tailwind CSS", "Cloudflare Stack"]
-        }
-      },
-      projects: [
-        {
-          id: "1",
-          title: "Nova Dashboard",
-          category: "UI/UX Design",
-          description: "A comprehensive dashboard for monitoring cloud infrastructure.",
-          image: "/hero_abstract_bg.png"
-        }
-      ]
-    };
-    fs.writeFileSync(DATA_PATH, JSON.stringify(initialData, null, 2));
-    return initialData;
-  }
-  const fileContent = fs.readFileSync(DATA_PATH, 'utf-8');
-  return JSON.parse(fileContent);
+// Cloudflare D1 Binding
+export interface Env {
+  DB: D1Database;
 }
 
-export function saveData(data: SiteData) {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+export async function getSiteData(db: D1Database): Promise<SiteData> {
+  const about = await db.prepare("SELECT bio FROM about WHERE id = 1").first<{ bio: string }>();
+  const skills = await db.prepare("SELECT type, name FROM skills").all<{ type: string, name: string }>();
+  const projects = await db.prepare("SELECT * FROM projects").all<Project>();
+
+  const designSkills = skills.results.filter((s: { type: string; name: string }) => s.type === 'design').map((s: { type: string; name: string }) => s.name);
+  const devSkills = skills.results.filter((s: { type: string; name: string }) => s.type === 'development').map((s: { type: string; name: string }) => s.name);
+
+  return {
+    about: {
+      bio: about?.bio || "",
+      skills: {
+        design: designSkills,
+        development: devSkills
+      }
+    },
+    projects: projects.results || []
+  };
+}
+
+export async function saveSiteData(db: D1Database, data: SiteData) {
+  // Update Bio
+  await db.prepare("UPDATE about SET bio = ? WHERE id = 1").bind(data.about.bio).run();
+
+  // For projects, we'll do a simple sync (clear and re-insert for MVP simplicity, 
+  // though a merge would be better for production)
+  await db.prepare("DELETE FROM projects").run();
+  
+  const projectStmt = db.prepare("INSERT INTO projects (id, title, category, description, image) VALUES (?, ?, ?, ?, ?)");
+  const batch = data.projects.map(p => projectStmt.bind(p.id, p.title, p.category, p.description, p.image));
+  
+  await db.batch(batch);
 }
